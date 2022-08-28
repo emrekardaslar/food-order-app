@@ -1,8 +1,9 @@
 import classes from "./AvailableMeals.module.css";
 import Card from "../UI/Card";
 import MealItem from "./MealItem/MealItem";
+import { useEffect, useState } from "react";
 
-const DUMMY_MEALS = [
+/* const DUMMY_MEALS = [
   {
     id: "m1",
     name: "Sushi",
@@ -27,14 +28,36 @@ const DUMMY_MEALS = [
     description: "Healthy...and green...",
     price: 18.99,
   },
-];
+]; */
 
 const AvailableMeals = () => {
+  const [meals, setMeals] = useState([]);
+
+  useEffect(()=>{
+    const fetchMeals = async () => {
+      const response = await fetch(process.env.REACT_APP_FIREBASE_URL)
+      const responseData = await response.json();
+      const loadedMeals = [];
+
+      Object.keys(responseData).forEach(meal => {
+        loadedMeals.push({
+          id: meal,
+          name: responseData[meal].name,
+          description: responseData[meal].description,
+          price: responseData[meal].price
+        })
+      })
+      setMeals(loadedMeals);
+    };
+
+    fetchMeals();
+  }, [])
+
   return (
     <section className={classes.meals}>
       <Card>
         <ul>
-          {DUMMY_MEALS.map((meal) => (
+          {meals.map((meal) => (
             <MealItem
               id={meal.id}
               key={meal.id}
