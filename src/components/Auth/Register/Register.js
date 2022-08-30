@@ -1,60 +1,66 @@
-import React, { useRef } from "react";
-import "./Register.css";
-import axios from "axios";
-import { getUsers } from "../../../services/AuthService";
+import React, { useRef, useState } from "react";
+import { useNavigate, Link } from 'react-router-dom';
+import { Form, Button, Card, Alert } from 'react-bootstrap'
+import { useAuth } from '../../../store/auth-context'
 
 function Register() {
-  const usernameRef = useRef();
-  const emailRef = useRef();
-  const passwordRef = useRef();
+  const emailRef = useRef()
+  const passwordRef = useRef()
+  const passwordConfirmRef = useRef()
+  const { signup } = useAuth()
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
-  const registerUser = async (username, email, password) => {
-    let users = await getUsers().then((res) => res.data);
-    if (users === null) {
-      axios.post(process.env.REACT_APP_FIREBASE_USERS, {
-        username: username,
-        email: email,
-        password: password,
-      });
-      return;
+  async function handleSubmit(e) {
+    e.preventDefault()
+
+    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+      return setError("Passwords do not match")
     }
 
-    let userExists = false;
-    Object.keys(users).forEach((id) => {
-      if (users[id].username === username || users[id].email === email) {
-        userExists = true;
-        return;
-      }
-    });
-
-    if (!userExists) {
-      axios.post(process.env.REACT_APP_FIREBASE_USERS, {
-        username: username,
-        email: email,
-        password: password,
-      });
+    try {
+      setError("")
+      setLoading(true)
+      await signup(emailRef.current.value, passwordRef.current.value)
+      navigate("/")
+    } catch(err) {
+      setError(err.message)
     }
-  };
 
-  const submitHandler = (event) => {
-    event.preventDefault();
-    const username = usernameRef.current.value;
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
-    //TODO: add validation
-    //TODO: add crypt for password
-    registerUser(username, email, password);
-  };
+    setLoading(false)
+  }
 
   return (
-    <form className="m-login-form" onSubmit={submitHandler}>
-      <h3>Register</h3>
-      <input type="text" placeholder="Username" ref={usernameRef} />
-      <input type="text" placeholder="E-mail" ref={emailRef} />
-      <input type="password" placeholder="Password" ref={passwordRef} />
-      <input type="submit" value="Login" />
-    </form>
-  );
+    <>
+      <Card>
+        <Card.Body>
+          <h2 className="text-center mb-4">Sign Up</h2>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <Form onSubmit={handleSubmit}>
+            <Form.Group id="email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control type="email" ref={emailRef} required />
+            </Form.Group>
+            <Form.Group id="password">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" ref={passwordRef} required />
+            </Form.Group>
+            <Form.Group id="password-confirm">
+              <Form.Label>Password Confirmation</Form.Label>
+              <Form.Control type="password" ref={passwordConfirmRef} required />
+            </Form.Group>
+            <Button disabled={loading} className="w-100" type="submit">
+              Sign Up
+            </Button>
+          </Form>
+        </Card.Body>
+      </Card>
+      <div className="w-100 text-center mt-2">
+        Already have an account? <Link to="/login">Log In</Link>
+      </div>
+    </>
+  )
 }
 
 export default Register;
