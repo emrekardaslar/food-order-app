@@ -3,9 +3,9 @@ import { Fragment, useState } from 'react';
 import HeaderCartButton from './HeaderCartButton';
 import mealsImage from '../../assets/meals.jpg';
 import classes from './Header.module.css';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../store/auth-context';
-import { Card, Button, Alert } from "react-bootstrap"
+import { Button, Alert } from "react-bootstrap"
 
 const Header = (props) => {
   const [error, setError] = useState("")
@@ -24,6 +24,7 @@ const Header = (props) => {
   }
   return (
     <Fragment>
+      {error && <Alert variant="danger">{error}</Alert>}
       <header className={classes.header}>
         <h1>ReactMeals</h1>
         <HeaderCartButton onClick={props.onShowCart}/>
