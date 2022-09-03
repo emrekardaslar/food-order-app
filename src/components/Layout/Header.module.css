@@ -27,3 +27,11 @@
     object-fit: cover;
     transform: rotateZ(-5deg) translateY(-4rem) translateX(-1rem);
   }
+
+  .btn {
+    color: #fff;
+    background-color: #460303;
+    background-color: cutom-color;
+    border-color: #460303;
+    border-color: cutom-cor;
+}

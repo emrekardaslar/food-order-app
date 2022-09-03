@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useAuth } from '../../store/auth-context';
 
 import classes from './Checkout.module.css';
 
@@ -6,6 +7,7 @@ const isEmpty = (value) => value.trim() === '';
 const isFiveChars = (value) => value.trim().length === 5;
 
 const Checkout = (props) => {
+  const { currentUser } = useAuth()
   const [formInputsValidity, setFormInputsValidity] = useState({
     name: true,
     street: true,
@@ -13,7 +15,6 @@ const Checkout = (props) => {
     postalCode: true,
   });
 
-  const nameInputRef = useRef();
   const streetInputRef = useRef();
   const postalCodeInputRef = useRef();
   const cityInputRef = useRef();
@@ -21,25 +22,22 @@ const Checkout = (props) => {
   const confirmHandler = (event) => {
     event.preventDefault();
 
-    const enteredName = nameInputRef.current.value;
     const enteredStreet = streetInputRef.current.value;
     const enteredPostalCode = postalCodeInputRef.current.value;
     const enteredCity = cityInputRef.current.value;
 
-    const enteredNameIsValid = !isEmpty(enteredName);
     const enteredStreetIsValid = !isEmpty(enteredStreet);
     const enteredCityIsValid = !isEmpty(enteredCity);
     const enteredPostalCodeIsValid = isFiveChars(enteredPostalCode);
 
     setFormInputsValidity({
-      name: enteredNameIsValid,
+      name: currentUser.email,
       street: enteredStreetIsValid,
       city: enteredCityIsValid,
       postalCode: enteredPostalCodeIsValid,
     });
 
     const formIsValid =
-      enteredNameIsValid &&
       enteredStreetIsValid &&
       enteredCityIsValid &&
       enteredPostalCodeIsValid;
@@ -49,16 +47,13 @@ const Checkout = (props) => {
     }
 
     props.onConfirm({
-      name: enteredName,
+      name: currentUser.email,
       street: enteredStreet,
-      city: enteredCityIsValid,
-      postalCode: enteredPostalCodeIsValid
+      city: enteredCity,
+      postalCode: enteredPostalCode
     });
   };
 
-  const nameControlClasses = `${classes.control} ${
-    formInputsValidity.name ? '' : classes.invalid
-  }`;
   const streetControlClasses = `${classes.control} ${
     formInputsValidity.street ? '' : classes.invalid
   }`;
@@ -71,11 +66,6 @@ const Checkout = (props) => {
 
   return (
     <form className={classes.form} onSubmit={confirmHandler}>
-      <div className={nameControlClasses}>
-        <label htmlFor='name'>Your Name</label>
-        <input type='text' id='name' ref={nameInputRef} />
-        {!formInputsValidity.name && <p>Please enter a valid name!</p>}
-      </div>
       <div className={streetControlClasses}>
         <label htmlFor='street'>Street</label>
         <input type='text' id='street' ref={streetInputRef} />
