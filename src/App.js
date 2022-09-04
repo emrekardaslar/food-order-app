@@ -6,11 +6,13 @@ import { Container } from "react-bootstrap";
 import { AuthProvider } from "./store/auth-context";
 import PrivateRoute from "./components/PrivateRoute";
 import OrdersPage from "./pages/OrdersPage";
+import CartProvider from "./store/CartProvider";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <CartProvider>
         <Routes>
           <Route path="/" element={
             <PrivateRoute>
@@ -37,6 +39,7 @@ function App() {
             </PrivateRoute>
           }></Route>
         </Routes>
+        </CartProvider>
       </AuthProvider>
     </BrowserRouter>
   );
