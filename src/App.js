@@ -5,6 +5,7 @@ import RegisterPage from "./pages/RegisterPage";
 import { Container } from "react-bootstrap";
 import { AuthProvider } from "./store/auth-context";
 import PrivateRoute from "./components/PrivateRoute";
+import OrdersPage from "./pages/OrdersPage";
 
 function App() {
   return (
@@ -30,6 +31,11 @@ function App() {
               </Container>
             }
           ></Route>
+          <Route path="/orders" element={
+            <PrivateRoute>
+              <OrdersPage />
+            </PrivateRoute>
+          }></Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>
