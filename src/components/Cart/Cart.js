@@ -4,6 +4,8 @@ import CartContext from "../../store/cart-context";
 import React, { useContext, useState } from "react";
 import CartItem from "./CartItem";
 import Checkout from "./Checkout";
+import { auth, db } from "../../services/firebase";
+import { v4 as uuidv4 } from 'uuid';
 
 const Cart = (props) => {
   const [isCheckout, setIsCheckout] = useState(false);
@@ -12,6 +14,23 @@ const Cart = (props) => {
   const cartCtx = useContext(CartContext);
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
   const hasItems = cartCtx.items.length > 0;
+
+  const submitOrderHandler = (userData) => {
+    let myuuid = uuidv4();
+    let userId = auth.currentUser.uid;
+    const ordersRef = db.ref('orders/'+ userId + '/' + myuuid);
+    
+    setIsSubmitting(true);
+    ordersRef.set({
+      user: userData,
+      orderedItems: cartCtx.items,
+      date: Date.now()
+    })
+
+    setIsSubmitting(false);
+    setDidSubmit(true);
+    cartCtx.clearCart();
+  }
 
   const cartItemRemoveHandler = (id) => {
     cartCtx.removeItem(id);
@@ -25,19 +44,6 @@ const Cart = (props) => {
     setIsCheckout(true);
   };
 
-  const submitOrderHandler = async (userData) => {
-    setIsSubmitting(true);
-    await fetch(process.env.REACT_APP_FIREBASE_ORDERS, {
-      method: "POST",
-      body: JSON.stringify({
-        user: userData,
-        orderedItems: cartCtx.items,
-      }),
-    });
-    setIsSubmitting(false);
-    setDidSubmit(true);
-    cartCtx.clearCart();
-  };
 
   const cartItems = (
     <ul className={classes["cart-items"]}>

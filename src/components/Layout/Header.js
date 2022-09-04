@@ -22,13 +22,23 @@ const Header = (props) => {
       setError("Failed to log out")
     }
   }
+
+  function navigateToOrders() {
+    navigate("/orders")
+  }
+
+  function navigateToMain() {
+    navigate("/")
+  }
+
   return (
     <Fragment>
       {error && <Alert variant="danger">{error}</Alert>}
       <header className={classes.header}>
-        <h1>ReactMeals</h1>
+        <h1 type="button" onClick={navigateToMain}>MealOrder</h1>
         <HeaderCartButton onClick={props.onShowCart}/>
         {currentUser.email}
+        <Button className={classes.btn} variant="secondary" onClick={navigateToOrders}>My Orders</Button>
         <Button className={classes.btn} variant="secondary" onClick={handleLogout}>Logout</Button>
       </header>      
       <div className={classes['main-image']}>
