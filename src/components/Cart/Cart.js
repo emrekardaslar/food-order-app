@@ -24,7 +24,8 @@ const Cart = (props) => {
     ordersRef.set({
       user: userData,
       orderedItems: cartCtx.items,
-      date: Date.now()
+      date: Date.now(),
+      isDelivered: false
     })
 
     setIsSubmitting(false);

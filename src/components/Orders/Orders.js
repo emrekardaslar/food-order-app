@@ -34,6 +34,7 @@ function Orders({ orders }) {
       <p>City: {orders.user.city}</p>
       <p>Postal Code: {orders.user.postalCode}</p>
       <p>Street: {orders.user.street}</p>
+      <p>Order Status: {orders.isDelivered ? 'Delivered' : 'Not Delivered'}</p>
     </Card>
   )
 }
