@@ -7,6 +7,7 @@ import { AuthProvider } from "./store/auth-context";
 import PrivateRoute from "./components/PrivateRoute";
 import OrdersPage from "./pages/OrdersPage";
 import CartProvider from "./store/CartProvider";
+import ForgotPasswordPage from "./components/Auth/ForgotPasswordPage";
 
 function App() {
   return (
@@ -29,9 +30,9 @@ function App() {
                   className="d-flex align-items-center justifty-content-center"
                   style={{ minHeight: "100vh" }}
                 >
-                <div className="w-100" style={{ maxWidth: "400px" }}>
-                  <LoginPage />
-                </div>
+                  <div className="w-100" style={{ maxWidth: "400px" }}>
+                    <LoginPage />
+                  </div>
                 </Container>
               }
             ></Route>
@@ -48,6 +49,19 @@ function App() {
                 </Container>
               }
             ></Route>
+            <Route
+              path="/forgot-password"
+              element={
+                <Container
+                  className="d-flex align-items-center justifty-content-center"
+                  style={{ minHeight: "100vh" }}
+                >
+                  <div className="w-100" style={{ maxWidth: "400px" }}>
+                    <ForgotPasswordPage />
+                  </div>
+                </Container>
+              }
+            />
             <Route
               path="/orders"
               element={
