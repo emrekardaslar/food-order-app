@@ -13,32 +13,50 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <CartProvider>
-        <Routes>
-          <Route path="/" element={
-            <PrivateRoute>
-              <MainPage />
-            </PrivateRoute>
-          }></Route>
-          <Route path="/login" element={<LoginPage />}></Route>
-          <Route
-            path="/register"
-            element={
-              <Container
-                className="d-flex align-items-center justifty-content-center"
-                style={{ minHeight: "100vh" }}
-              >
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <MainPage />
+                </PrivateRoute>
+              }
+            ></Route>
+            <Route
+              path="/login"
+              element={
+                <Container
+                  className="d-flex align-items-center justifty-content-center"
+                  style={{ minHeight: "100vh" }}
+                >
                 <div className="w-100" style={{ maxWidth: "400px" }}>
-                  <RegisterPage />
+                  <LoginPage />
                 </div>
-              </Container>
-            }
-          ></Route>
-          <Route path="/orders" element={
-            <PrivateRoute>
-              <OrdersPage />
-            </PrivateRoute>
-          }></Route>
-        </Routes>
+                </Container>
+              }
+            ></Route>
+            <Route
+              path="/register"
+              element={
+                <Container
+                  className="d-flex align-items-center justifty-content-center"
+                  style={{ minHeight: "100vh" }}
+                >
+                  <div className="w-100" style={{ maxWidth: "400px" }}>
+                    <RegisterPage />
+                  </div>
+                </Container>
+              }
+            ></Route>
+            <Route
+              path="/orders"
+              element={
+                <PrivateRoute>
+                  <OrdersPage />
+                </PrivateRoute>
+              }
+            ></Route>
+          </Routes>
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>
